@@ -31,6 +31,10 @@ github_username:  separatrix
 remote_theme: freelancer-theme
 plugins:
   - jekyll-feed
+    
+social:
+  - title: twitter
+    url: http://twitter.com/torfias
 
 # Exclude from processing.
 # The following items will not be processed, by default.
