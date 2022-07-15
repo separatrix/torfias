@@ -35,6 +35,8 @@ plugins:
 social:
   - title: twitter
     url: http://twitter.com/torfias
+    
+contact: twitter
 
 # Exclude from processing.
 # The following items will not be processed, by default.
