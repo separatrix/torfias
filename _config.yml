@@ -28,7 +28,7 @@ twitter_username: torfias
 github_username:  separatrix
 
 # Build settings
-remote_theme: freelancer-theme
+#remote_theme: freelancer-theme
 plugins:
   - jekyll-feed
     
