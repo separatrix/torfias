@@ -35,7 +35,7 @@ plugins:
 # Color settings (hex-codes without the leading hash-tag)
 color:
   primary: 000000
-#  primary-rgb: "24,288,156"
+  primary-rgb: "0,0,0"
   secondary: 111111
   secondary-dark: 050505
     
