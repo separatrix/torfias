@@ -1,0 +1,31 @@
+---
+layout: default
+---
+
+<div class="home">
+    <img src="img/profile.png" alt="profile" class="img-centered" style="display: block">
+    
+    <p class="page-header">
+        Hello, my name is Torfi Ásgeirsson and I make games.
+        <br><br>
+        I have been making games and apps for over 10 years. I have also taught game development, organized games events, and run game development communities.
+        <br><br>
+        If you'd like to contact me or keep up with what I'm doing, I'm <a href="https://twitter.com/torfias">@torfias</a> on twitter.
+        <br><br>
+        I release most of my games on <a href="https://torfi.itch.io/">torfi.itch.io</a>
+        <br><br>
+        Here are some of the things I've worked on:
+    </p>
+    {%- if site.posts.size > 0 -%}
+    <div class="portfolio-flex-grid">
+        <div class="portfolio-flex-row">
+            {%- for post in site.posts -%}
+                <div class="portfolio-flex-item portfolio-item">
+                    <a class="post-link" href="{{ post.url | relative_url }}"><img src="img/posts/{{ post.img }}" class="img-responsive" alt="{{ post.alt }}" ></a>
+                </div>
+            {%- endfor -%}
+        </div>
+    </div>
+    {%- endif -%}
+
+</div>
