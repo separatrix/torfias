@@ -1,0 +1,11 @@
+---
+layout: post
+title:  "Gogogic"
+date:   2017-01-01 17:40:54 +0000
+categories: games
+img: gogogic.png
+wide: tinyplaces.png
+alt: Gogogic
+---
+
+Gogogic was a mobile and web game company in Reykjavík, Iceland. I was hired there as a game designer in 2013 and worked two of their titles, Tiny Places and Godsrule.

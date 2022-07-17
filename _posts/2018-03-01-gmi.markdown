@@ -4,7 +4,10 @@ title:  "Game Makers Iceland"
 date:   2017-01-01 17:40:54 +0000
 categories: games
 img: gmi.png
+wide: gmi.JPG
 alt: Game Makers Iceland
 ---
 
-Game Makers Iceland is a community of game developers in Iceland.
+Game Makers Iceland is a community organization for game developers in Iceland that I co-founded in 2016. We ran monthly events and game jams as well a Slack group.
+
+Check out the Game Makers Iceland website [here](http://gamemakers.is/).

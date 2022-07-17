@@ -3,9 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="f83a585e-93a9-4cba-a685-2bb52fa19b7c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.torfias.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.torfias.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/_config.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2022-07-16-welcome-to-jekyll.markdown" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/about.markdown" beforeDir="false" afterPath="$PROJECT_DIR$/about.markdown" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_includes/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/_includes/css/main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_posts/2017-01-01-triple-agent.markdown" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2017-01-01-triple-agent.markdown" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_posts/2018-01-01-ootl.markdown" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2018-01-01-ootl.markdown" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_posts/2018-02-01-iog.markdown" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2018-02-01-iog.markdown" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_posts/2018-03-01-gmi.markdown" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2018-03-01-gmi.markdown" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_posts/2021-01-01-nuts.markdown" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2021-01-01-nuts.markdown" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_posts/2021-02-01-handshake.markdown" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2021-02-01-handshake.markdown" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +53,8 @@
       <option name="presentableId" value="Default" />
       <updated>1657843072627</updated>
       <workItem from="1657843074414" duration="4368000" />
-      <workItem from="1657993288057" duration="11348000" />
+      <workItem from="1657993288057" duration="11771000" />
+      <workItem from="1658078561405" duration="4917000" />
     </task>
     <servers />
   </component>

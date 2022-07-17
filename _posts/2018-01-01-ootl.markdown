@@ -4,7 +4,10 @@ title:  "Out of the Loop"
 date:   2017-01-01 17:40:54 +0000
 categories: games
 img: ootl.png
+wide: ootl.png
 alt: Out of the Loop
 ---
 
-Out of the Loop is a mobile party game made by myself and Steingerður Lóa Gunnarsdóttir. We released in the summer of 2018 on Android and iOS.
+Out of the Loop is a mobile party game made by myself and Steingerður Lóa Gunnarsdóttir. We released in the summer of 2018.
+
+You can check it out on [Android](https://play.google.com/store/apps/details?id=com.tastyrook.loop&hl=en&gl=US) or [iOS](https://apps.apple.com/us/app/out-of-the-loop/id1299191826).

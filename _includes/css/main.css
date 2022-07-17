@@ -82,7 +82,7 @@ background-color: #fff;
 
 header {
     text-align: center;
-    color: #fff;
+    color: #000;
     background: #{{ site.color.primary }};
 }
 
@@ -224,8 +224,9 @@ transition: all ease .5s;
 
 a.post-link:hover {
     /*outline: #000000 solid 4px;*/
-    -webkit-filter: brightness(1.1);
-    filter: brightness(1.1);
+    /*-webkit-filter: brightness(0.8);*/
+    /*filter: brightness(0.8);*/
+    transform: scale(1.05);
 }
 
 .portfolio-item img {
@@ -268,7 +269,7 @@ a.post-link:hover {
         display: flex;
         flex-flow: row wrap;
         align-items: stretch;
-        justify-content: space-between;
+        justify-content: space-evenly;
     }
     .portfolio-flex-grid .portfolio-flex-row .portfolio-flex-item {
         flex: 1 0 49%;
@@ -277,8 +278,8 @@ a.post-link:hover {
 }
 @media (min-width: 960px) {
     .portfolio-flex-grid .portfolio-flex-row .portfolio-flex-item {
-        flex: 1 0 32%;
-        max-width: 32%;
+        flex: 1 0 30%;
+        max-width: 30%;
     }
 }
 /* A large grid might need four columns on widescreen layouts */

@@ -4,7 +4,10 @@ title:  "NUTS"
 date:   2017-01-01 17:40:54 +0000
 categories: games
 img: nuts.png
+wide: nuts.jpg
 alt: NUTS
 ---
 
-NUTS is a video game
+NUTS is a first-person squirrel surveillance mystery video game made by Joon, Pol, Muuutsch, Char, and myself. I helped with programming and game design.
+
+We released in 2021 on PC, Nintendo Switch, and Apple Arcade. You can check it out [here](https://nuts.game/).
