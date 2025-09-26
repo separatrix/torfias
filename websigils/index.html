@@ -173,14 +173,8 @@
   </div>
 
 <script>
-/*
-  Port of the Unity sigil generator into synchronous JS using SVG.js.
-  Rendering is inspired by how the Unity update activated connectors/corners/U/O per cell.
-  This is an approximation intended for SVG export and experimentation.
-*/
 
 // ---- Utilities ----
-// Simple hash function for strings
 function hashString(str) {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
@@ -191,7 +185,6 @@ function hashString(str) {
   return Math.abs(hash);
 }
 
-// Seeded random number generator (Linear Congruential Generator)
 class SeededRandom {
   constructor(seed) {
     this.seed = seed % 2147483647;
@@ -244,8 +237,6 @@ const consonants = [
 let currentSigilName = '';
 
 function generateSigilName() {
-  // Generate a random name with alternating consonants and vowels, length 4-8
-  // This uses Math.random() directly so it's not deterministic
   let name = '';
   let length = Math.floor(Math.random() * 5) + 4; // 4-8
   let useVowel = Math.random() > 0.5;
@@ -299,41 +290,31 @@ function getNeighbours(positionObj) {
 }
 
 function generateSigil() {
-  // Get the name from input field, or generate random name if empty
   const inputName = document.getElementById('nameInput').value.trim().toUpperCase();
   if (inputName) {
     currentSigilName = inputName;
   } else {
     currentSigilName = generateSigilName();
-    // Update the input field with the generated name
     document.getElementById('nameInput').value = currentSigilName;
   }
   
-  // Create a deterministic seed from the name
   const seed = hashString(currentSigilName);
   rng = new SeededRandom(seed);
   
-  // Now all random generation will be deterministic based on the name
-  
-  // pick size
   sigilSize = randInt(minSigilSize, maxSigilSize);
-  let cellSize = Math.round(450 / sigilSize); // Cell size varies based on sigil complexity
+  let cellSize = Math.round(450 / sigilSize);
   if (cellSize % 2 == 1) cellSize += 1
-  // console.log("cellSize: ", cellSize)
   
-  // Fixed canvas dimensions regardless of sigil size
   const canvasSize = 450;
   const w = canvasSize;
   const h = canvasSize;
 
-  // initialize svg.js drawing surface
   clearCanvas();
   draw = SVG().addTo('#canvas').size(w + outerPadding*2, h + outerPadding*2);
   draw.viewbox(0,0,w + outerPadding*2, h + outerPadding*2);
 
   const isGrayscale = randFloat() < 0.05
 
-  // background
   let bgColor = hsvToRgbString(randFloat(), randFloat(), randFloat());
   if (isGrayscale) {
     const gray = Math.round(randFloat() * 255);
@@ -341,10 +322,8 @@ function generateSigil() {
   }
   draw.rect(w + outerPadding*2, h + outerPadding*2).fill(bgColor).move(0,0);
 
-  // Set the page background to match the sigil background
   // document.body.style.background = bgColor;
 
-  // Data structures (ports of Unity)
   const wallSize = (sigilSize - 1) * sigilSize;
   const horizontal = new Array(wallSize).fill(false);
   const vertical = new Array(wallSize).fill(false);
@@ -356,9 +335,8 @@ function generateSigil() {
   const pathIsSymmetrical = [];
   const pathColors = [];
 
-  // choose path starts
   const pathStarts = [];
-  const pathSteps = []; // not needed for rendering but we keep parity
+  const pathSteps = []; 
   const pathCount = randInt(2, Math.max(2, Math.floor(sigilSize / 2)));
   for (let i = 0; i < pathCount; i++) {
     // choose startRow like Unity (0..sigilSize-i-1)
@@ -417,7 +395,7 @@ function generateSigil() {
       const neighbours = getNeighbours(currentPos);
       unvisitedNeighbours = neighbours.filter(n => !visited[n]);
       if (unvisitedNeighbours.length === 0) {
-        // remove edge (like Unity)
+        // remove edge
         edges.splice(ei,1);
         edgeOrigins.splice(ei,1);
         continue;
@@ -433,7 +411,6 @@ function generateSigil() {
     const neighbour = getPosition(neighbourIndex);
     const current = getPosition(currentIndex);
 
-    // determine wall index and set horizontal/vertical per unity
     let wallIndex = Math.min(currentIndex, neighbourIndex);
     const wallPos = getPosition(wallIndex);
     if (neighbour.x === current.x) {
@@ -453,7 +430,7 @@ function generateSigil() {
     edgeOrigins.push(chosenEdgeOrigin);
     colors[neighbourIndex] = pathColors[chosenEdgeOrigin];
 
-    // record step (kept for parity; not used later)
+    // record step
     pathSteps.push({ origin: chosenEdgeOrigin, coordinates: neighbour });
 
     // symmetry handling
@@ -487,14 +464,8 @@ function generateSigil() {
   // ---- Rendering ----
   const group = draw.group().move(outerPadding, outerPadding);
 
-  // // draw base black field for 'cells' so rounded shapes overlay nicely
-  // group.rect(w, h).fill('#0b0607').move(0,0).radius(8);
-
-  // For each cell: draw the main rounded filled rect if visited; then connectors, corners, U's, O's
   let rectSize = Math.round(cellSize * 0.9)
   if (rectSize % 2 == 1) rectSize += 1
-  // console.log("rectSize: ", rectSize)
-  // const connectorWidth = Math.max(4, Math.round(cellSize * 0.18));
   const connectorWidth = rectSize;
   const connectorLen = cellSize;
   const cornerSize = Math.round(cellSize * 0.1);
@@ -504,17 +475,13 @@ function generateSigil() {
   for (let i = 0; i < sigilSize * sigilSize; i++) {
     const pos = getPosition(i);
     const px = pos.x * cellSize + outerPadding + (cellSize - rectSize) * 0.5;
-    const py = (sigilSize-1 - pos.y) * cellSize + outerPadding; // flip Y to render row 0 at top (unity Y up)
-    // Note: Unity used localPosition with y increasing up; in canvas y goes down so invert Y:
-    // We want visual parity but orientation doesn't need to be exact to the user image.
+    const py = (sigilSize-1 - pos.y) * cellSize + outerPadding;
 
-    // Draw visited cell as rounded rect
     const fillColor = visited[i] ? colors[i] : 'black';
     if (visited[i]) {
       group.rect(rectSize, rectSize).move(px, py).fill(fillColor).radius(cellRadius);
     }
 
-    // compute connector booleans similar to Unity Update
     const hIndex = getIndex({x:pos.x, y:pos.y}, sigilSize - 1);
     const rightConnector = pos.x < sigilSize - 1 && horizontal[hIndex];
     const belowIndex = getIndex({x:pos.x, y:pos.y-1});
@@ -523,7 +490,6 @@ function generateSigil() {
     const leftConnector = pos.x > 0 && horizontal[leftHIndex];
     const topConnector = pos.y < sigilSize - 1 && vertical[i];
 
-    // draw connectors as rounded rectangles bridging cell centers
     const centerX = px + rectSize/2;
     const centerY = py + rectSize/2;
     if (rightConnector) {
@@ -548,8 +514,6 @@ function generateSigil() {
       A ${(gap) / 2} ${(gap) / 2} 0 0 0 ${gap} 0
       Z
     `
-    // compute corner and U / O logic per original Update
-    // downLeftU / rightUpU / rightDownU / leftUpU variables:
     let leftDownU = false;
     if (pos.x > 0 && pos.y > 0) {
       const indexHLeftBelow = getIndex({x:pos.x-1, y:pos.y-1}, sigilSize-1);
@@ -616,65 +580,42 @@ function generateSigil() {
       Z
       ${roundedCutout}
     `
-    // .transform({translateX: centerX, translateY: centerY})
-    // .fill('black')
-    // .attr({ 'fill-rule': 'evenodd' })
-
-    // corners
     const cornerTL = !leftUpU && (pos.x > 0 && pos.y < sigilSize - 1 && leftConnector && topConnector);
     const cornerTR = !rightUpU && (pos.x < sigilSize - 1 && pos.y < sigilSize - 1 && topConnector && rightConnector);
     const cornerBR = !rightDownU && (pos.x < sigilSize - 1 && pos.y > 0 && bottomConnector && rightConnector);
     const cornerBL = !leftDownU && (pos.x > 0 && pos.y > 0 && leftConnector && bottomConnector);
 
-    const cornerColor = '#13060a';
     if (cornerTL) group.path(cornerShape).transform({translateX:centerX - cellSize, translateY: centerY - cellSize}).fill(fillColor).attr({'fill-rule': 'evenodd'})
     if (cornerTR) group.path(cornerShape).transform({translateX:centerX, translateY: centerY - cellSize, rotate: 90}).fill(fillColor).attr({'fill-rule': 'evenodd'})
     if (cornerBR) group.path(cornerShape).transform({translateX:centerX, translateY: centerY, rotate: 180}).fill(fillColor).attr({'fill-rule': 'evenodd'})
     if (cornerBL) group.path(cornerShape).transform({translateX:centerX - cellSize, translateY: centerY, rotate: 270}).fill(fillColor).attr({'fill-rule': 'evenodd'})
   }
 
-  // put a subtle outer stroke around the whole sigil
-  // group.rect(w, h).move(0,0).fill('none').stroke({ width: Math.max(2, Math.round(cellSize*0.03)), color: '#0f0b0d' }).radius(8);
-
-  // store svg element for download
   return draw;
 }
 
 // ---- UI ----
 document.getElementById('summonBtn').addEventListener('click', () => {
-  // Generate a random name and fill the input field
   const randomName = generateSigilName();
   document.getElementById('nameInput').value = randomName;
   
-  // Automatically trigger EVOKE
   document.getElementById('generateBtn').click();
 });
 
 document.getElementById('generateBtn').addEventListener('click', () => {
-  // Hide the intention message
   document.getElementById('intentionMessage').style.display = 'none';
-  
-  // Show the canvas
   document.getElementById('canvas').style.display = 'block';
-  
-  // Show the SUMMON button after first evocation
   document.getElementById('summonBtn').style.display = 'inline-block';
-  
-  // Generate the sigil
   generateSigil();
-  
-  // Show the download controls
   document.getElementById('downloadControls').style.display = 'block';
 });
 
-// Allow Enter key in name input to trigger EVOKE
 document.getElementById('nameInput').addEventListener('keypress', (event) => {
   if (event.key === 'Enter') {
     document.getElementById('generateBtn').click();
   }
 });
 
-// Convert input to uppercase in real-time
 document.getElementById('nameInput').addEventListener('input', (event) => {
   const input = event.target;
   const cursorPosition = input.selectionStart;
@@ -682,15 +623,10 @@ document.getElementById('nameInput').addEventListener('input', (event) => {
   input.setSelectionRange(cursorPosition, cursorPosition);
 });
 
-// Restart functionality - restore all controls
 document.getElementById('restartBtn').addEventListener('click', () => {
-  // Hide the sigil title
   document.getElementById('sigilTitle').style.visibility = 'hidden';
   document.getElementById('sigilTitle').innerHTML = '&nbsp;';
-  
   document.getElementById('nameInput').style.display = 'block';
-  
-  // Reset button states
   document.getElementById('summonBtn').style.display = 'inline-block';
   document.getElementById('generateBtn').style.display = 'block';
   document.getElementById('savePngBtn').style.display = 'block';
@@ -699,19 +635,16 @@ document.getElementById('restartBtn').addEventListener('click', () => {
 });
 
 // document.getElementById('downloadBtn').addEventListener('click', () => {
-//   // Show the sigil title
 //   const titleElement = document.getElementById('sigilTitle');
 //   titleElement.textContent = currentSigilName;
 //   titleElement.style.color = 'white';
 //   titleElement.style.visibility = 'visible';
   
-//   // serialize the svg node
 //   const svgElement = document.querySelector('#canvas svg');
 //   if (!svgElement) return;
 //   const serializer = new XMLSerializer();
 //   let source = serializer.serializeToString(svgElement);
 
-//   // Add XML declaration & namespace if missing
 //   if(!source.match(/^<\?xml/)) {
 //     source = '<?xml version="1.0" standalone="no"?>\n' + source;
 //   }
@@ -727,7 +660,6 @@ document.getElementById('restartBtn').addEventListener('click', () => {
 // });
 
 document.getElementById('savePngBtn').addEventListener('click', () => {
-  // Show the sigil title
   const titleElement = document.getElementById('sigilTitle');
   titleElement.textContent = currentSigilName;
   titleElement.style.color = 'white';
@@ -742,38 +674,31 @@ document.getElementById('savePngBtn').addEventListener('click', () => {
   
   console.log('SVG element found:', svgElement);
   
-  // Get SVG dimensions
   const svgRect = svgElement.getBoundingClientRect();
   const svgWidth = svgElement.viewBox.baseVal.width || svgRect.width;
   const svgHeight = svgElement.viewBox.baseVal.height || svgRect.height;
   
   console.log('SVG dimensions:', svgWidth, 'x', svgHeight);
   
-  // Create canvas
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
   canvas.width = svgWidth;
   canvas.height = svgHeight;
   
-  // Serialize SVG
   const serializer = new XMLSerializer();
   let source = serializer.serializeToString(svgElement);
   
-  // Add XML declaration if missing
   if(!source.match(/^<\?xml/)) {
     source = '<?xml version="1.0" standalone="no"?>\n' + source;
   }
   
-  // Create blob and object URL for the SVG
   const svgBlob = new Blob([source], {type: 'image/svg+xml;charset=utf-8'});
   const svgUrl = URL.createObjectURL(svgBlob);
   
-  // Create image and draw to canvas
   const img = new Image();
   img.onload = function() {
     ctx.drawImage(img, 0, 0);
     
-    // Convert canvas to PNG and download
     canvas.toBlob(function(blob) {
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -784,13 +709,11 @@ document.getElementById('savePngBtn').addEventListener('click', () => {
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
       
-      // Hide the input field and buttons after sealing the sigil
       document.getElementById('nameInput').style.display = 'none';
       document.getElementById('summonBtn').style.display = 'none';
       document.getElementById('generateBtn').style.display = 'none';
       document.getElementById('savePngBtn').style.display = 'none';
       
-      // Show the restart button
       document.getElementById('restartControls').style.display = 'block';
     }, 'image/png');
     
@@ -798,8 +721,6 @@ document.getElementById('savePngBtn').addEventListener('click', () => {
   };
   img.src = svgUrl;
 });
-
-// Initial state - no sigil generated until user clicks EVOKE
 
 </script>
 </body>
