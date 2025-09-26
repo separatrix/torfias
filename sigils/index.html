@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <title>The Lesser Keys of Agyxyki</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -312,6 +313,9 @@ function generateSigil() {
   clearCanvas();
   draw = SVG().addTo('#canvas').size(w + outerPadding*2, h + outerPadding*2);
   draw.viewbox(0,0,w + outerPadding*2, h + outerPadding*2);
+  
+  // Fix for mobile rendering - ensure crisp edges
+  draw.attr('shape-rendering', 'crispEdges');
 
   const isGrayscale = randFloat() < 0.05
 
@@ -472,10 +476,15 @@ function generateSigil() {
   const uThickness = connectorWidth;
   const cellRadius = Math.round(cellSize * 0.1);
 
+  // Ensure all coordinates are integers to prevent sub-pixel rendering
+  function snapToPixel(value) {
+    return Math.round(value);
+  }
+
   for (let i = 0; i < sigilSize * sigilSize; i++) {
     const pos = getPosition(i);
-    const px = pos.x * cellSize + outerPadding + (cellSize - rectSize) * 0.5;
-    const py = (sigilSize-1 - pos.y) * cellSize + outerPadding;
+    const px = snapToPixel(pos.x * cellSize + outerPadding + (cellSize - rectSize) * 0.5);
+    const py = snapToPixel((sigilSize-1 - pos.y) * cellSize + outerPadding);
 
     const fillColor = visited[i] ? colors[i] : 'black';
     if (visited[i]) {
@@ -490,19 +499,19 @@ function generateSigil() {
     const leftConnector = pos.x > 0 && horizontal[leftHIndex];
     const topConnector = pos.y < sigilSize - 1 && vertical[i];
 
-    const centerX = px + rectSize/2;
-    const centerY = py + rectSize/2;
+    const centerX = snapToPixel(px + rectSize/2);
+    const centerY = snapToPixel(py + rectSize/2);
     if (rightConnector) {
-      group.rect(cellSize, connectorWidth).move(centerX, centerY - connectorWidth/2).fill(fillColor);
+      group.rect(cellSize, connectorWidth).move(centerX, snapToPixel(centerY - connectorWidth/2)).fill(fillColor);
     }
     if (leftConnector) {
-      group.rect(cellSize, connectorWidth).move(centerX - cellSize, centerY - connectorWidth/2).fill(fillColor);
+      group.rect(cellSize, connectorWidth).move(snapToPixel(centerX - cellSize), snapToPixel(centerY - connectorWidth/2)).fill(fillColor);
     }
     if (topConnector) {
-      group.rect(connectorWidth, cellSize).move(centerX - connectorWidth/2, centerY - cellSize).fill(fillColor);
+      group.rect(connectorWidth, cellSize).move(snapToPixel(centerX - connectorWidth/2), snapToPixel(centerY - cellSize)).fill(fillColor);
     }
     if (bottomConnector) {
-      group.rect(connectorWidth, rectSize/2).move(centerX - connectorWidth/2, centerY).fill(fillColor);
+      group.rect(connectorWidth, rectSize/2).move(snapToPixel(centerX - connectorWidth/2), centerY).fill(fillColor);
     }
 
     let gap = cellSize - rectSize
@@ -522,12 +531,12 @@ function generateSigil() {
       // Left U
       if (leftConnector && bottomConnector && horizontal[indexHLeftBelow]) {
         leftDownU = true;
-        group.path(uPath).transform({rotate: -90, translateX: px - gap, translateY: py + rectSize}).fill(fillColor)
+        group.path(uPath).transform({rotate: -90, translateX: snapToPixel(px - gap), translateY: snapToPixel(py + rectSize)}).fill(fillColor)
       }
       // Down U
       if (leftConnector && bottomConnector && vertical[indexVLeftBelow]) {
         leftDownU = true;
-        group.path(uPath).transform({rotate: 180, translateX: px - gap, translateY: py + rectSize}).fill(fillColor)
+        group.path(uPath).transform({rotate: 180, translateX: snapToPixel(px - gap), translateY: snapToPixel(py + rectSize)}).fill(fillColor)
       }
     }
 
@@ -538,12 +547,12 @@ function generateSigil() {
       // Right U
       if (rightConnector && topConnector && horizontal[indexHAbove]) {
         rightUpU = true;
-        group.path(uPath).transform({rotate: 90, translateX: px + rectSize, translateY: py - gap}).fill(fillColor)
+        group.path(uPath).transform({rotate: 90, translateX: snapToPixel(px + rectSize), translateY: snapToPixel(py - gap)}).fill(fillColor)
       }
       // Up U
       if (rightConnector && topConnector && vertical[indexVRight]) {
         rightUpU = true;
-        group.path(uPath).transform({rotate: 0, translateX: px + rectSize, translateY: py - gap}).fill(fillColor)
+        group.path(uPath).transform({rotate: 0, translateX: snapToPixel(px + rectSize), translateY: snapToPixel(py - gap)}).fill(fillColor)
       }
     }
 
@@ -585,10 +594,10 @@ function generateSigil() {
     const cornerBR = !rightDownU && (pos.x < sigilSize - 1 && pos.y > 0 && bottomConnector && rightConnector);
     const cornerBL = !leftDownU && (pos.x > 0 && pos.y > 0 && leftConnector && bottomConnector);
 
-    if (cornerTL) group.path(cornerShape).transform({translateX:centerX - cellSize, translateY: centerY - cellSize}).fill(fillColor).attr({'fill-rule': 'evenodd'})
-    if (cornerTR) group.path(cornerShape).transform({translateX:centerX, translateY: centerY - cellSize, rotate: 90}).fill(fillColor).attr({'fill-rule': 'evenodd'})
-    if (cornerBR) group.path(cornerShape).transform({translateX:centerX, translateY: centerY, rotate: 180}).fill(fillColor).attr({'fill-rule': 'evenodd'})
-    if (cornerBL) group.path(cornerShape).transform({translateX:centerX - cellSize, translateY: centerY, rotate: 270}).fill(fillColor).attr({'fill-rule': 'evenodd'})
+    if (cornerTL) group.path(cornerShape).transform({translateX: snapToPixel(centerX - cellSize), translateY: snapToPixel(centerY - cellSize)}).fill(fillColor).attr({'fill-rule': 'evenodd'})
+    if (cornerTR) group.path(cornerShape).transform({translateX: snapToPixel(centerX), translateY: snapToPixel(centerY - cellSize), rotate: 90}).fill(fillColor).attr({'fill-rule': 'evenodd'})
+    if (cornerBR) group.path(cornerShape).transform({translateX: snapToPixel(centerX), translateY: snapToPixel(centerY), rotate: 180}).fill(fillColor).attr({'fill-rule': 'evenodd'})
+    if (cornerBL) group.path(cornerShape).transform({translateX: snapToPixel(centerX - cellSize), translateY: snapToPixel(centerY), rotate: 270}).fill(fillColor).attr({'fill-rule': 'evenodd'})
   }
 
   return draw;
