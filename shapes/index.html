@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SVG.js Canvas Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.2/dist/svg.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #222; /* Dark grey background */
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #drawing {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="drawing"></div>
+    <script>
+        const canvasSize = 600
+        const gridSize = 10
+        
+        function getIndex(position, size = 0) {
+            if (size <= 0) size = gridSize;
+            return Math.floor(position.y) * size + Math.floor(position.x);
+        }
+        function getPosition(index, size = 0) {
+            if (size <= 0) size = gridSize;
+            return { x: index % size, y: Math.floor(index / size) };
+        }
+
+        function drawCanvas() {
+            const draw = SVG().addTo('#drawing').size(canvasSize, canvasSize);
+            draw.rect(canvasSize, canvasSize).fill('#eee');
+
+            // draw.path(square)
+            //     .fill("black")
+            //     .transform({translateX: 100, translateY: 100, scale: 0.5})
+            //     .attr({'fill-rule': 'evenodd'});
+            
+            // draw.path(square)
+            //     .fill("black")
+            //     .transform({translateX: 0, translateY: 0, scale: 0.5})
+            //     .attr({'fill-rule': 'evenodd'});
+
+            const cellSize = canvasSize / gridSize;
+            const filled = new Array(gridSize * gridSize).fill(false);
+            const horizontalOpen = new Array(gridSize * gridSize - 1).fill(true);
+            const verticalOpen = new Array(gridSize * gridSize -1).fill(true);
+            
+            let square = `
+                M 0 0
+                H ${cellSize}
+                V ${cellSize}
+                H 0
+                Z
+            `;
+
+            let cornerArcIn = `
+                ${square}
+                H ${cellSize}
+                A ${cellSize} ${cellSize} 0 0 1 0 ${cellSize}
+                Z
+            `;
+
+            let cornerArcOut = `
+                M ${cellSize} 0
+                A ${cellSize} ${cellSize} 0 0 0 0 ${cellSize}
+                H ${cellSize}
+                Z
+            `;
+
+            const visitQueue = [];
+            visitQueue.push(Math.floor(Math.random() * (gridSize * gridSize)));
+            while (visitQueue.length > 0) {
+                const currentIndex = visitQueue.shift();
+                filled[currentIndex] = true
+                const type = Math.floor(Math.random() * 2);
+                // const type = 0;
+                const gridPosition = getPosition(currentIndex)
+                let px = gridPosition.x * cellSize
+                let py = gridPosition.y * cellSize
+                let drawPath = square
+                if (type == 0) {
+                    if (gridPosition.x > 0) {
+                        const index = getIndex({x: gridPosition.x - 1, y: gridPosition.y});
+                        if (!filled[index]) {
+                            visitQueue.push(index)
+                        }
+                    }
+                    if (gridPosition.y > 0) {
+                        const index = getIndex({x: gridPosition.x, y: gridPosition.y - 1});
+                        if (!filled[index]) {
+                            visitQueue.push(index);
+                        }
+                    }
+                    if (gridPosition.x < gridSize - 1) {
+                        const index = getIndex({x: gridPosition.x + 1, y: gridPosition.y});
+                        if (!filled[index]) {
+                            visitQueue.push(index);
+                        }
+                    }
+                    if (gridPosition.y < gridSize - 1) {
+                        const index = getIndex({x: gridPosition.x, y: gridPosition.y + 1});
+                        if (!filled[index]) {
+                            visitQueue.push(index);
+                        }
+                    }
+                }
+                if (type == 1) {
+                    drawPath = cornerArcIn
+                    if (gridPosition.y > 0) {
+                        const index = getIndex({x: gridPosition.x, y: gridPosition.y - 1});
+                        if (!filled[index]) {
+                            visitQueue.push(index);
+                        }
+                    }
+                    if (gridPosition.x < gridSize - 1) {
+                        const index = getIndex({x: gridPosition.x + 1, y: gridPosition.y});
+                        if (!filled[index]) {
+                            visitQueue.push(index);
+                        }
+                    }
+                }
+
+                draw.path(drawPath)
+                    .fill("black")
+                    .transform({
+                        translateX: px,
+                        translateY: py,
+                    })
+                    .attr({'fill-rule': 'evenodd'});
+
+                if (Math.random() > 0.2) {
+                // if (Math.random() >= 0) {
+                    for (let i = visitQueue.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [visitQueue[i], visitQueue[j]] = [visitQueue[j], visitQueue[i]];
+                    }
+                }
+                else {
+                    break;
+                }
+            }
+        }
+
+        drawCanvas();
+    </script>
+</body>
+</html>
