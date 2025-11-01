@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Static Blog Mockup</title>
+  <style>
+    /* Base layout */
+    :root{
+      --bg:#000;
+      --fg:#fff;
+      --muted:rgba(255,255,255,0.6);
+      --indexW:240px; /* width of left index */
+      --postWidth:33vw; /* target ~1/3 of the screen */
+      --gap:28px;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+    html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);}
+
+    /* page container */
+    .site{
+      min-height:100vh;
+      display:block;
+      padding:48px 40px;
+      box-sizing:border-box;
+    }
+
+    /* left index column (fixed-ish) */
+    .index{
+      position:fixed;
+      left:24px;
+      top:48px;
+      width:var(--indexW);
+      max-width: calc(40% - 40px);
+    }
+    .index h2{font-size:16px;margin:0 0 12px;color:var(--muted);font-weight:600;}
+    .index ul{list-style:none;padding:0;margin:0;}
+    .index li{margin:8px 0;font-size:14px;opacity:0.9}
+    .index a{color:var(--muted);text-decoration:none}
+    .index a.active{color:var(--fg);font-weight:600}
+
+    /* posts column — about 1/3 width and shifted right to leave space for index */
+    .posts-wrap{
+      margin-left: calc(var(--indexW) + 64px); /* shift content right so index has space */
+      max-width:1200px;
+    }
+
+    .post{
+      width:var(--postWidth);
+      min-width:300px;
+      color:var(--fg);
+      margin:0 0 56px 0;
+      padding-bottom:8px;
+    }
+
+    /* Title style: left-aligned, thin line beneath */
+    .post .title{
+      text-align:left;
+      font-size:20px;
+      margin:0 0 8px 0;
+      line-height:1.05;
+    }
+    .post .title::after{
+      content:"";
+      display:block;
+      height:1px;
+      width:100%;
+      background:rgba(255,255,255,0.15);
+      margin-top:10px;
+    }
+
+    .meta{font-size:12px;color:var(--muted);margin-top:8px}
+
+    .content{margin-top:18px; font-size:15px; color:var(--fg); line-height:1.55}
+
+    /* Photo grid (small images in a grid) */
+    .photo-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
+      margin-top:14px;
+    }
+    .photo-grid img{width:100%;height:120px;object-fit:cover;border-radius:6px;display:block}
+
+    /* Full width photo — within the post column it fills the post width */
+    .full-photo{display:block;width:100%;height:auto;border-radius:6px;margin-top:14px}
+    .caption{font-size:13px;color:var(--muted);margin-top:8px}
+
+    /* Responsive behavior: on small screens stack index on top and make post full width */
+    @media (max-width:900px){
+      :root{--postWidth:100vw}
+      .index{position:static;width:100%;margin-bottom:18px}
+      .posts-wrap{margin-left:0;padding-top:12px}
+      .post{width:100%;min-width:0}
+      .photo-grid img{height:90px}
+    }
+
+    /* Slight visual polish */
+    a, a:visited{color:inherit}
+    .post small{color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="site">
+
+    <aside class="index" aria-label="Posts index">
+      <h2>Posts</h2>
+      <ul>
+        <li><a href="#post-1">A Morning in Kyoto</a></li>
+        <li><a href="#post-2">Minimalist Interiors</a></li>
+        <li><a href="#post-3">Street Food Notes</a></li>
+      </ul>
+    </aside>
+
+    <main class="posts-wrap">
+
+      <!-- Post 1: small photo grid -->
+      <article id="post-1" class="post" aria-labelledby="title-1">
+        <h3 id="title-1" class="title">A Morning in Kyoto</h3>
+        <div class="meta">Oct 10, 2025 — Travel · Photography</div>
+        <div class="content">
+          <p>Short note about wandering quiet streets, light through paper lanterns, and small cafes.</p>
+
+          <div class="photo-grid" aria-hidden="false">
+            <img src="https://images.unsplash.com/photo-1505765053226-8e5d3b7a0f4f?q=80&w=800&auto=format&fit=crop" alt="alley with lanterns">
+            <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=800&auto=format&fit=crop" alt="tea shop interior">
+            <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?q=80&w=800&auto=format&fit=crop" alt="wooden shopfront">
+            <img src="https://images.unsplash.com/photo-1470115636492-6d2b56f9141c?q=80&w=800&auto=format&fit=crop" alt="stone path">
+            <img src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=800&auto=format&fit=crop" alt="bicycle and rickshaw">
+            <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=800&auto=format&fit=crop" alt="morning light">
+          </div>
+
+          <p class="caption">Small moments collected over a morning walk.</p>
+        </div>
+      </article>
+
+      <!-- Post 2: full-width photo with caption -->
+      <article id="post-2" class="post" aria-labelledby="title-2">
+        <h3 id="title-2" class="title">Minimalist Interiors</h3>
+        <div class="meta">Sep 22, 2025 — Design</div>
+        <div class="content">
+          <p>Thoughts on negative space, material honesty, and calm palettes.</p>
+
+          <img class="full-photo" src="https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf?q=80&w=1400&auto=format&fit=crop" alt="minimalist living room">
+          <p class="caption">A living room where each object has quiet purpose.</p>
+        </div>
+      </article>
+
+      <!-- Post 3: another full width photo example -->
+      <article id="post-3" class="post" aria-labelledby="title-3">
+        <h3 id="title-3" class="title">Street Food Notes</h3>
+        <div class="meta">Aug 5, 2025 — Food</div>
+        <div class="content">
+          <p>Making notes on textures, heat, and the best roadside stalls.</p>
+
+          <img class="full-photo" src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1400&auto=format&fit=crop" alt="street food vendor">
+          <p class="caption">A quick bite, five-star memory.</p>
+        </div>
+      </article>
+
+    </main>
+
+  </div>
+</body>
+</html>

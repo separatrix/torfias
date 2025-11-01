@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Static Blog Mockup</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site">
+
+    <aside class="index" aria-label="Posts index">
+      <h2>Posts</h2>
+      <ul>
+        <li><a href="#post-1">11/10/2025</a></li>
+      </ul>
+    </aside>
+
+    <main class="posts-wrap">
+
+      <!-- Post Start -->
+      <article id="post-1" class="post" aria-labelledby="title-1">
+        <h3 id="title-1" class="title">A large, hideous, man-like being</h3>
+        <div class="meta">11/10/2025</div>
+        <div class="content">
+          <p>Hello friends! I made it to Tokyo alive! This place is really incredible and I already have so many thoughts and things I'd like to share about the experience so far. For now, though, I just have one little story for you.</p>
+
+          <p>I didn't sleep much on the 20+ hour journey here. I was glad to make it through immigration in my semi-delirious state with only a raised eyebrow at my declaration that my 89-day stay was purely for tourism. The next test was to navigate the Tokyo Metro, which is excellent and probably as accessible to a non-Japanese speaking foreigner as it should be, but sleep deprived, wearing two backpacks, rolling two suitcases, sweating profusely, and without internet on my phone (I forgot to get a Japanese ESIM beforehand), in amongst all these very polite, well put together Japanese people, I felt a bit like an ogre who suddenly found himself teleported into the most civilized society on Earth. Illiterate and utterly tactless.</p>
+
+          <img class="full-photo" src="img\6fffb1f1-e480-4c94-9b2b-7b2fbee287e4.jpg" alt="a capsule toy shop">
+
+          <p>After about 4 hours of trains, trudging with this heavy baggage through Tokyo, and many disdainful glances, I did eventually make it to my apartment. Exhausted as I was, I still had to take a look around and find something to eat. I found a nice looking street with some shops and restaurants nearby and started walking. I saw so many interesting things on this street but one place really stood out. This particular establishment was full of nothing but gleaming white capsule machines. Coin-operated dispensers where you can buy a little toy or charm in a plastic ball. Each machine is different, you can get anything from the guy in The Scream but his body is made of salmon roe to a pair of fuzzy cat testicles. A key feature of these machines, though, is that the particular item you get is random. The cat testicle machine always give you a pair of cat testicles but whether you get a pair of calico testicles or black testicles is random. That's part of the fun of these machines, you don't know exactly what you're going to get.</p>
+
+          <div class="photo-grid" aria-hidden="false">
+            <img src="img\9b099dc8-886c-4939-bb6e-f1bd87b44be6.jpg" alt="a capsule machine featuring sea creatures">
+            <img src="img\bf372809-5999-4d55-a61c-84e7af41b9de.jpg" alt="a capsule machine featuring cats stuck in subway handles">
+            <img src="img\d6ad6074-e7c8-4795-b104-c180d04c3006.jpg" alt="a capsule machine featuring tiny tempura">
+            <img src="img\e25293b7-1711-4180-bd65-a3af4add3a0c.jpg" alt="a capsule machine featuring saluting cats">
+            <img src="img\eb6737cd-b20a-446c-aad7-2aeb83ae7a2e.jpg" alt="a capsule machine featuring cat testicle keychains">
+            <img src="img\62225a50-1468-49a8-aa75-08e8ea5f040f.jpg" alt="a capsule machine featuring various salmon roe themed toys">
+          </div>
+
+          <p>Now the existence of these machines and the fact that there was a whole shop full of them tickled me and I was very pleased to find it but it was not that surprising. What was surprising to me was who was in this shop. It was not full of tourists nor children. It was full of well put together Japanese adults, all seriously and carefully considering each machine, coins in hand, deciding which one they'd like to turn the big crank on and pull a capsule from. Obviously I can't know for sure but I really got the feeling that this wasn't a one-time novelty for most of these people. They looked liked they had been here before. Like they just got off work and this was a place they liked to stop on the way home. Maybe I shouldn't be surprised but I couldn't imagine seeing the same type of person in a shop like this if it existed in Iceland. I can't imagine adults going there on their way home from work to pull a capsule as a little treat.</p>
+
+          <p>Anyway, I got the salmon roe Yayoi Kusama figure. Not bad.</p>
+
+          <img class="full-photo" src="img\c8002e4a-cc0b-4a03-af47-599faf12df06.jpg" alt="a capsule toy shop">
+        </div>
+      </article>
+      <!-- Post End -->
+
+    </main>
+
+    <div id="lightbox" class="lightbox">
+      <img id="lightbox-img" src="" alt="">
+    </div>
+
+    <script>
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      
+      // Get all images except the lightbox image
+      const images = document.querySelectorAll('img:not(#lightbox-img)');
+      
+      images.forEach(img => {
+        img.addEventListener('click', e => {
+          lightboxImg.src = e.target.src;
+          lightboxImg.alt = e.target.alt;
+          lightbox.classList.add('active');
+        });
+      });
+      
+      lightbox.addEventListener('click', () => {
+        lightbox.classList.remove('active');
+      });
+    </script>
+
+  </div>
+</body>
+</html>
